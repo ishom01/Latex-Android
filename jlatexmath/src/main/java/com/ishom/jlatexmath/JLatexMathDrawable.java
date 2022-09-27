@@ -23,12 +23,17 @@ import org.scilab.forge.jlatexmath.TeXIcon;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.regex.Pattern;
 
 public class JLatexMathDrawable extends Drawable {
 
     public static final int ALIGN_LEFT = 0;
     public static final int ALIGN_CENTER = 1;
     public static final int ALIGN_RIGHT = 2;
+
+    public static final Pattern removingRegex = Pattern.compile("\\\\r|\\\\n|<br>");
+    public static final Pattern starInsideBeginEnd =
+            Pattern.compile("(?<=(\\\\begin\\{))|(?<=(\\\\end\\{))|\\**(?=\\})");
 
     @SuppressWarnings("WeakerAccess")
     @IntDef({ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT})
@@ -38,7 +43,10 @@ public class JLatexMathDrawable extends Drawable {
 
     @NonNull
     public static Builder builder(@NonNull String latex) {
-        return new Builder(latex);
+        // cleanup before build
+        String newLatex = latex.replaceAll(removingRegex.toString(), "");
+        newLatex = newLatex.replaceAll(starInsideBeginEnd.toString(), "");
+        return new Builder(newLatex);
     }
 
     private final TeXIcon icon;
