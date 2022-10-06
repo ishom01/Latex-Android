@@ -31,7 +31,7 @@ public class JLatexMathDrawable extends Drawable {
     public static final int ALIGN_CENTER = 1;
     public static final int ALIGN_RIGHT = 2;
 
-    public static final Pattern removingRegex = Pattern.compile("\\\\r|\\\\n|<br>");
+    public static final Pattern removingRegex = Pattern.compile("(\\\\r(?!\\w))|(\\\\n(?!\\w))|<br>");
     public static final Pattern starInsideBeginEnd =
             Pattern.compile("(?<=(\\\\begin\\{))|(?<=(\\\\end\\{))|\\**(?=\\})");
 
